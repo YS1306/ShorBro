@@ -1,0 +1,13 @@
+Flask==2.2
+Flask-SQLAlchemy==3.0.2
+Flask-Security
+email_validator
+flask-login
+pytest
+coverage
+beautifulsoup4
+Flask-Migrate
+werkzeug==2.2.0
+email-validator
+pytz
+Pillow

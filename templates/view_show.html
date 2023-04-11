@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShowBro</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        .navbar-brand {
+            font-size: 1.5rem;
+        }
+        .navbar-toggler {
+            border: none;
+        }
+    </style>
+</head>
+<body style="background-color:aliceblue;">
+
+    <nav class="navbar navbar-expand-md navbar-dark " style="background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgb(0, 125, 150) 100%);">
+        <div class="container">
+            <a class="navbar-brand" href="#">ShowBro</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item ">
+                        <a class="nav-link "  href="/"><button type="button"
+                            class="btn btn-dark" id="but-link">Home</button></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link "  href="/About"><button type="button"
+                            class="btn btn-dark" id="but-link">About</button></a>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a href="/user/dashboard" class="nav-link "><button type="button"
+                            class="btn btn-dark" id="but-link">My dashboard</button></a>
+                    </li>
+                    {% if current_user.roles[0]|string == "<Role 1>"  %}
+                        <li class="nav-item">
+                            <a href="/admin/dashboard" class="nav-link "><button type="button"
+                                class="btn btn-dark" id="but-link">Admin Controls</button></a>
+                        </li>
+                    {% endif %}
+
+                    <li class="nav-item">
+                        <a href="/logout" class="nav-link "><button type="button"
+                            class="btn btn-dark" id="but-link">Logout</button></a>
+                    </li>
+
+                    {% elif not current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a href="/admin_login" class="nav-link "><button type="button"
+                            class="btn btn-dark" id="but-link">Admin Login/ SignUp</button></a>
+                    </li>
+                    <li class="nav-item " >
+                        <a href="/user_login" class="nav-link mr-2  "><button type="button"
+                            class="btn btn-dark" id="but-link">User Login/ SignUp</button></a>
+                    </li>
+                    {% endif %}
+
+                    <li class="nav-item" style="margin-top: 6.5px;" >
+                        <form class="form-inline my-auto">
+                            
+                            <input class="form-control inline " type="search"
+                                placeholder="Search" aria-label="Search">
+                        
+                            <span >
+                            <a href="/search" class="ml-2"><button type="button"
+                                class="btn btn-dark" id="but-link">Search</button></a>
+                            </span>
+                            
+                        </form>
+
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero-body">
+        <div class="jumbotron" style="background-image: url(/static/Background.jpg); background-size: cover ;"> 
+            
+            <div class="row">    
+                <div class="col-lg-4 display-4">
+                    Welcome to ShowBro
+                </div>
+
+                <div class="col-8" style="border-left: 2px solid black; border-radius: 1px;">
+                    ShowBro can help you find the best shows with the best prices. <br> You can book as many shows as you want to and enjoy the day. <br>
+                    Check out the shows below and book your tickets nowww!! <br> 
+                </div>
+            </div>
+        </div>
+
+    <div class="container justify-content-center">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="row justify-content-center text-center">
+            <div class="notification mx-auto" style="font-size:larger ;">
+                {{ messages[0] }}
+            </div>
+        </div>
+        {% endif %}
+        {% endwith %}
+        
+        <div class="row row-cols-auto justify-content-center">
+            <div class="card w-75 " style="max-width: 850px; background-color: beige;"> 
+            
+                <div class="card-header lead w-100 mx-auto " style="text-align: center;"> {{ show.name }} </div>
+                <div class="row g-0">
+    
+                <div class="col-md-4"><img class="card-img-top" src="data:image/jpeg;base64, {{ show_img }}" style="padding: 2px; border: black solid 1px ; border-radius: 3px;"></div>
+                
+                <div class="card-body align-self-center col-md-8 " style="text-align: center;">
+                    <div class="card mx-auto mr-4" style="background-color: rgb(248, 248, 189);">
+                        <div class="card-title mx-auto my-2 ">Show Genre: {{ tags }}</div>
+                        <div class="card-title mx-auto  ">Show Ratings: {{ show.rating }}</div>
+                        
+                        <div class="card-title mx-auto">Price:  {{ show.ticket_price}} </div>
+                        <div class="card-title mx-auto">Timing: {{ show.start|strftime('%I:%M %p')  }} to {{ show.end|strftime('%I:%M %p')  }}<br> on {{ show.start|strftime('%d-%m-%y') }}</div>
+                        <!-- <div class="card-title mx-auto">Genre: {{ show.tags[1] }}</div> -->
+                        <a  class="mx-auto my-2" href="book_tickets?show={{ show.id }}"><button class="btn btn-lg btn-outline-warning w-30" > Book Tickets </button></a>
+                        <a href="/" class="mx-auto my-2"> <button class="btn btn-lg btn-outline-danger " > Go Back</button></a>
+                    </div>
+                </div>
+                </div>  
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+</body>
+</html>
